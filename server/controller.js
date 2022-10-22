@@ -30,17 +30,15 @@ sequelize
           .catch(err => {
               console.error('Unable to connect to the database:', err);
                 });
-//const sequelize = new Sequelize(CONNECTION_STRING);
-/*const sequelize = new Sequelize({
-    dialect: 'postgres',
-    dialectOptions: {
-        ssl: {
-            rejectUnauthorized: false
-        }
-    }
-})*/
 
 module.exports = {
+    getCountries: (req, res) => {
+        sequelize.query(`
+            SELECT * FROM countries;
+        `).then((dbRes) => {
+                res.status(200).send(dbRes[0]) 
+            }).catch(err => console.log('ERROR GETTING LIST OF COUNTRIES', err))
+    },        
     seed: (req, res) => {
         sequelize.query(`
             drop table if exists cities;
@@ -55,8 +53,8 @@ module.exports = {
                 city_id serial PRIMARY KEY,
                 name VARCHAR (255),
                 rating INTEGER,
-                FOREIGN KEY (country_id)
-                    REFERENCES countries (country_id)
+                country_id INTEGER,
+                CONSTRAINT fk_countries FOREIGN KEY (country_id) REFERENCES countries (country_id)
             );
 
             insert into countries (name)
