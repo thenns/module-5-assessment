@@ -1,16 +1,44 @@
 require('dotenv').config()
-console.log(process.env)
+//console.log(process.env)
 
 const { Sequelize } = require('sequelize');
+const { CONNECTION_STRING } = process.env;
 
-const squelize = new Sequelize({
+/*
+I should probably point out that
+I got the following code 
+straing from heroku's website
+This is how they say to connect using
+sequelize\
+*/
+
+sequelize = new Sequelize(CONNECTION_STRING, {
+        dialectOptions: {
+              ssl: {
+                      require: true,
+                              rejectUnauthorized: false
+                                    }
+                                        }
+                                          }
+                                          );
+
+sequelize
+  .authenticate()
+  .then(() => {
+      console.log('Connection has been established successfully.');
+        })
+          .catch(err => {
+              console.error('Unable to connect to the database:', err);
+                });
+//const sequelize = new Sequelize(CONNECTION_STRING);
+/*const sequelize = new Sequelize({
     dialect: 'postgres',
     dialectOptions: {
         ssl: {
             rejectUnauthorized: false
         }
     }
-}
+})*/
 
 module.exports = {
     seed: (req, res) => {
@@ -23,7 +51,13 @@ module.exports = {
                 name varchar
             );
 
-            *****YOUR CODE HERE*****
+            CREATE TABLE cities (
+                city_id serial PRIMARY KEY,
+                name VARCHAR (255),
+                rating INTEGER,
+                FOREIGN KEY (country_id)
+                    REFERENCES countries (country_id)
+            );
 
             insert into countries (name)
             values ('Afghanistan'),
