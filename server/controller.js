@@ -1,6 +1,17 @@
 require('dotenv').config()
 console.log(process.env)
 
+const { Sequelize } = require('sequelize');
+
+const squelize = new Sequelize({
+    dialect: 'postgres',
+    dialectOptions: {
+        ssl: {
+            rejectUnauthorized: false
+        }
+    }
+}
+
 module.exports = {
     seed: (req, res) => {
         sequelize.query(`
