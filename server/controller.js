@@ -34,10 +34,10 @@ sequelize
 module.exports = {
     getCities: (req, res) => {
         sequelize.query(`
-           SELECT cities.city AS name, rating
-           FROM cities AS cities
-                JOIN countries AS whatever
-                    ON country_id = country_id;
+           SELECT c.name AS city, rating
+           FROM cities AS c
+                JOIN countries AS countries
+                    ON c.country_id = countries.country_id;
         `).then((dbRes) => {
             res.status(200).send(dbRes[0])
         }).catch(err => console.log('ERROR GETTING LIST OF CITIES', err))
@@ -52,7 +52,7 @@ module.exports = {
                 (${name}, ${rating}, ${countryId});
         `).then((dbRes) => {
             res.status(200).send(dbRes[0])
-        }).catch(err => console.log('ERROR ENTERING NEW CITY'), err))
+        }).catch(err => console.log('ERROR ENTERING NEW CITY', err))
     },
     getCountries: (req, res) => {
         sequelize.query(`
