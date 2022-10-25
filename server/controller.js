@@ -32,6 +32,15 @@ sequelize
                 });
 
 module.exports = {
+    deleteCity: (req, res) => {
+        const { city_id } = req.params;
+        sequelize.query(`
+            DELETE FROM cities
+                WHERE ${city_id} = city_id;
+        `).then((dbRes) => {
+            res.status(200).send(dbRes[0])
+        }).catch(err => console.log('ERROR DELETING CITY', err))
+    },
     getCities: (req, res) => {
         sequelize.query(`
            SELECT c.name AS city, rating
